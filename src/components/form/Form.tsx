@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 const FormWrapper = styled('form')`
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     > *:not(:last-child) {
         margin-bottom: 1em;
     }
@@ -39,7 +39,11 @@ export const Form: ComponentType<FormProps> = ({
                 <FormWrapper
                     onSubmit={(data) => {
                         handleSubmit(data)
-                        clearOnSubmit && form.reset()
+                        if (clearOnSubmit) {
+                            form.reset()
+                            form.restart()
+                        }
+
                         setIsSuccess(true)
                     }}
                 >

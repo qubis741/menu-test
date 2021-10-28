@@ -1,73 +1,126 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { useAppDispatch, useAppSelector } from 'store'
-import { Menu, MenuItemList, MenuList } from 'domain/offer/types'
+import { Menu, MenuItem } from 'domain/offer/types'
 
 export type OfferState = {
-    menus: MenuList
-    menuItems: MenuItemList
+    menus: Menu[]
+    menuItems: MenuItem[]
 }
 export const initialState: OfferState = {
-    menus: {},
-    menuItems: {}
+    menus: [],
+    menuItems: []
 }
 
 type NewMenu = Omit<Menu, 'id'>
-
-const getHighestObjKey = (obj: MenuList | MenuItemList): number => {
-    const highestId = Object.keys(obj).reduce((prev, curr) => {
-        const numCurr = parseInt(curr)
-        return prev < numCurr ? numCurr : prev
-    }, 0)
-    return highestId || 0
-}
+type NewMenuItem = Omit<MenuItem, 'id'>
 
 export const offerSlice = createSlice({
     name: 'offer',
     initialState,
     reducers: {
         addMenu: (state, action: PayloadAction<NewMenu>) => {
-            const newMenuId = getHighestObjKey(state.menus) + 1
-            const newMenu = { ...action.payload, id: newMenuId }
+            const newMenuId = state.menus.length + 1
+            const newMenu = {
+                ...action.payload,
+                menuItemsIds: [],
+                id: newMenuId
+            }
             return {
                 ...state,
-                menus: {
-                    ...state.menus,
-                    [newMenuId]: newMenu
-                }
+                menus: [...state.menus, newMenu]
             }
         },
-        updateMenu: (state, action: PayloadAction<Menu>) => ({
-            ...state,
-            menus: {
-                ...state.menus,
-                [action.payload.id]: {
-                    ...action.payload
-                }
-            }
-        }),
-        deleteMenu: (state, action: PayloadAction<number>) => {
-            const { [action.payload]: removed, ...otherMenus } = state.menus
-            const updatedMenuItems = Object.entries(state.menuItems).filter(
-                ([_key, mi]) => mi.id !== action.payload
+        updateMenu: (state, action: PayloadAction<Menu>) => {
+            const updatedMenus = state.menus.map((m) =>
+                m.id === action.payload.id
+                    ? { ...m, name: action.payload.name }
+                    : m
             )
             return {
                 ...state,
-                menus: otherMenus,
-                menuItems: Object.fromEntries(updatedMenuItems)
+                menus: updatedMenus
+            }
+        },
+        deleteMenu: (state, action: PayloadAction<number>) => {
+            const updatedMenus = state.menus.filter(
+                (m) => m.id !== action.payload
+            )
+            const updatedMenuItems = state.menuItems.filter(
+                (mi) => mi.menuId !== action.payload
+            )
+            return {
+                ...state,
+                menus: updatedMenus,
+                menuItems: updatedMenuItems
+            }
+        },
+        addMenuItem: (state, action: PayloadAction<NewMenuItem>) => {
+            const newMenuItemId = state.menuItems.length + 1
+            const newMenuItem = { ...action.payload, id: newMenuItemId }
+            const updatedMenus = state.menus.map((m) =>
+                m.id === action.payload.menuId
+                    ? { ...m, menuItemsIds: [...m.menuItemsIds, newMenuItemId] }
+                    : m
+            )
+            return {
+                ...state,
+                menus: updatedMenus,
+                menuItems: [...state.menuItems, newMenuItem]
+            }
+        },
+        updateMenuItem: (state, action: PayloadAction<MenuItem>) => {
+            const updatedMenuItems = state.menuItems.map((mi) =>
+                mi.id === action.payload.id
+                    ? {
+                          ...mi,
+                          name: action.payload.name,
+                          price: action.payload.price
+                      }
+                    : mi
+            )
+            return {
+                ...state,
+                menuItems: updatedMenuItems
+            }
+        },
+        deleteMenuItem: (state, action: PayloadAction<number>) => {
+            const updatedMenus = state.menus.map((m) => ({
+                ...m,
+                menuItemsIds: m.menuItemsIds.filter(
+                    (miId) => miId !== action.payload
+                )
+            }))
+            const updatedMenuItems = state.menuItems.filter(
+                (mi) => mi.id !== action.payload
+            )
+            return {
+                ...state,
+                menus: updatedMenus,
+                menuItems: updatedMenuItems
             }
         }
     }
 })
 
-export const { addMenu, updateMenu, deleteMenu } = offerSlice.actions
+export const {
+    addMenu,
+    updateMenu,
+    deleteMenu,
+    addMenuItem,
+    updateMenuItem,
+    deleteMenuItem
+} = offerSlice.actions
 
 type UseOffer = {
-    menus: MenuList
-    menuItems: MenuItemList
+    menus: Menu[]
+    menuItems: MenuItem[]
     actions: {
         addMenu: (menu: NewMenu) => void
         updateMenu: (menu: Menu) => void
         deleteMenu: (menuId: number) => void
+        addMenuItem: (menuItem: NewMenuItem) => void
+        updateMenuItem: (menuItem: MenuItem) => void
+        deleteMenuItem: (menuItemId: number) => void
     }
 }
 
@@ -80,7 +133,10 @@ export const useOffer = (): UseOffer => {
         actions: {
             addMenu: (menu) => dispatch(addMenu(menu)),
             updateMenu: (menu) => dispatch(updateMenu(menu)),
-            deleteMenu: (menuId) => dispatch(deleteMenu(menuId))
+            deleteMenu: (menuId) => dispatch(deleteMenu(menuId)),
+            addMenuItem: (menuItem) => dispatch(addMenuItem(menuItem)),
+            updateMenuItem: (menuItem) => dispatch(updateMenuItem(menuItem)),
+            deleteMenuItem: (menuItemId) => dispatch(deleteMenuItem(menuItemId))
         }
     }
 }

@@ -1,39 +1,32 @@
 import { Field } from 'react-final-form'
 import React, { ComponentType } from 'react'
-import { FormControl, Input, InputLabel } from '@mui/material'
-import { Option, Select } from 'components/form/inputs/Select'
+import { Alert, FormControl, TextField } from '@mui/material'
 
 type FormFieldProps = {
     label: string
     name: string
     type?: 'text' | 'number' | 'select'
-    options?: Option[]
 }
 
 export const FormField: ComponentType<FormFieldProps> = ({
     label,
     name,
-    type = 'text',
-    options
+    type = 'text'
 }) => {
     return (
         <Field name={name}>
-            {({ input }) => (
+            {({ input, meta }) => (
                 <FormControl>
-                    <InputLabel htmlFor={name}>{label}</InputLabel>
-                    {options ? (
-                        <Select
-                            aria-describedby={name}
-                            options={options}
-                            {...input}
-                        />
-                    ) : (
-                        <Input
-                            id={name}
-                            aria-describedby={name}
-                            type={type}
-                            {...input}
-                        />
+                    <TextField
+                        id={name}
+                        aria-describedby={name}
+                        type={type}
+                        label={label}
+                        variant="standard"
+                        {...input}
+                    />
+                    {meta.touched && meta.error && (
+                        <Alert severity="error">{meta.error}</Alert>
                     )}
                 </FormControl>
             )}

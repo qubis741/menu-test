@@ -7,11 +7,11 @@ export const PreviewPage: ComponentType = () => {
     console.log(menus)
     return (
         <div>
-            <Typography variant="h3" gutterBottom>
+            <Typography variant="h4" gutterBottom>
                 Preview
             </Typography>
             <List>
-                {Object.values(menus).map((m) => (
+                {menus.map((m) => (
                     <ListItem key={m.id} disablePadding>
                         {m.name}
                     </ListItem>
