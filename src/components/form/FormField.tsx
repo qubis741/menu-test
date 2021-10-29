@@ -1,6 +1,6 @@
 import { Field } from 'react-final-form'
 import React, { ComponentType } from 'react'
-import { Alert, FormControl, TextField } from '@mui/material'
+import { FormControl, TextField } from '@mui/material'
 
 type FormFieldProps = {
     label: string
@@ -13,23 +13,36 @@ export const FormField: ComponentType<FormFieldProps> = ({
     name,
     type = 'text'
 }) => {
+    const isNumberInput = type === 'number'
     return (
         <Field name={name}>
-            {({ input, meta }) => (
-                <FormControl>
-                    <TextField
-                        id={name}
-                        aria-describedby={name}
-                        type={type}
-                        label={label}
-                        variant="standard"
-                        {...input}
-                    />
-                    {meta.touched && meta.error && (
-                        <Alert severity="error">{meta.error}</Alert>
-                    )}
-                </FormControl>
-            )}
+            {({ input, meta }) => {
+                const error = meta.touched && meta.error
+                return (
+                    <FormControl>
+                        <TextField
+                            id={name}
+                            aria-describedby={name}
+                            type={type}
+                            label={label}
+                            variant="standard"
+                            {...input}
+                            inputProps={{ step: '0.01' }}
+                            onChange={({ target: { value } }) => {
+                                input.onChange(
+                                    isNumberInput ? Number(value) : value
+                                )
+                            }}
+                            helperText={
+                                isNumberInput
+                                    ? 'Use "," for decimals'
+                                    : undefined
+                            }
+                            error={!!error}
+                        />
+                    </FormControl>
+                )
+            }}
         </Field>
     )
 }

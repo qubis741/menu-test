@@ -1,12 +1,12 @@
 export type Menu = {
-    id: number
+    id: string
     name: string
-    menuItemsIds: number[]
+    menuItemsIds: string[]
 }
 
 export type MenuItem = {
-    id: number
+    id: string
     name: string
     price: number
-    menuId: number
+    menuId: string
 }

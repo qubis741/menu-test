@@ -1,20 +1,17 @@
 import React, { ComponentType } from 'react'
-import { Box, IconButton, Typography } from '@mui/material'
+import { Grid, IconButton, Typography } from '@mui/material'
 import { useOffer } from 'domain/offer/slice'
 import { Form } from 'components/form/Form'
 import { FormField } from 'components/form/FormField'
 import { Menu, MenuItem } from 'domain/offer/types'
 import styled from '@emotion/styled'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { BorderBox } from 'components/ui/BorderBox'
 
-const Container = styled(Box)`
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 1rem;
-    max-width: 600px;
-    &:not(:last-child) {
-        margin-bottom: 1rem;
-    }
+const EditorPageContainer = styled('div')`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     > *:not(:last-child) {
         margin-bottom: 1rem;
     }
@@ -29,7 +26,7 @@ const MenuItemForm: ComponentType<{ menu: Menu; menuItem?: MenuItem }> = ({
     } = useOffer()
 
     return (
-        <Container>
+        <BorderBox vertical>
             <Typography variant="h5" gutterBottom>
                 {menuItem ? `MenuItem (id: ${menuItem.id})` : 'New MenuItem'}
                 {menuItem && (
@@ -55,9 +52,9 @@ const MenuItemForm: ComponentType<{ menu: Menu; menuItem?: MenuItem }> = ({
                 }}
             >
                 <FormField name="name" label="Name" />
-                <FormField name="price" label="Price" />
+                <FormField name="price" label="Price" type="number" />
             </Form>
-        </Container>
+        </BorderBox>
     )
 }
 
@@ -70,7 +67,7 @@ const MenuForm: ComponentType<{ menu?: Menu }> = ({ menu }) => {
         ? menuItems.filter((mi) => mi.menuId === menu.id)
         : []
     return (
-        <Container>
+        <BorderBox vertical>
             <Typography variant="h5" gutterBottom>
                 {menu ? `Menu (id: ${menu.id})` : 'New Menu'}
                 {menu && (
@@ -94,14 +91,22 @@ const MenuForm: ComponentType<{ menu?: Menu }> = ({ menu }) => {
             </Form>
 
             {menu && (
-                <>
-                    <MenuItemForm menu={menu} />
+                <Grid container spacing={2}>
+                    <Grid item lg={12}>
+                        <MenuItemForm menu={menu} />
+                    </Grid>
                     {relatedMenuItems.map((mi) => (
-                        <MenuItemForm key={mi.id} menu={menu} menuItem={mi} />
+                        <Grid key={mi.id} item lg={6}>
+                            <MenuItemForm
+                                key={mi.id}
+                                menu={menu}
+                                menuItem={mi}
+                            />
+                        </Grid>
                     ))}
-                </>
+                </Grid>
             )}
-        </Container>
+        </BorderBox>
     )
 }
 
@@ -109,17 +114,19 @@ export const EditorPage: ComponentType = () => {
     const { menus } = useOffer()
 
     return (
-        <div>
-            <Typography variant="h5" gutterBottom>
+        <EditorPageContainer>
+            <Typography variant="h4" gutterBottom>
                 Editor
             </Typography>
-            {/*<Typography variant="h4" gutterBottom>
-                Menus
-            </Typography>*/}
             <MenuForm />
-            {menus.map((m) => (
-                <MenuForm key={m.id} menu={m} />
-            ))}
-        </div>
+
+            <Grid container spacing={2}>
+                {menus.map((m) => (
+                    <Grid key={m.id} item lg={6}>
+                        <MenuForm menu={m} />
+                    </Grid>
+                ))}
+            </Grid>
+        </EditorPageContainer>
     )
 }

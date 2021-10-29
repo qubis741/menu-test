@@ -25,7 +25,7 @@ const App: ComponentType = () => {
                     </Link>
                 </Toolbar>
             </AppBar>
-            <Container maxWidth="lg">
+            <Container maxWidth="lg" sx={{ padding: '1rem 0' }}>
                 <Switch>
                     <Route exact path="/">
                         <PreviewPage />

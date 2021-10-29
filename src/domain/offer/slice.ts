@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { useAppDispatch, useAppSelector } from 'store'
 import { Menu, MenuItem } from 'domain/offer/types'
+import { v4 as uuidv4 } from 'uuid'
 
 export type OfferState = {
     menus: Menu[]
@@ -19,7 +20,7 @@ export const offerSlice = createSlice({
     initialState,
     reducers: {
         addMenu: (state, action: PayloadAction<NewMenu>) => {
-            const newMenuId = state.menus.length + 1
+            const newMenuId = uuidv4()
             const newMenu = {
                 ...action.payload,
                 menuItemsIds: [],
@@ -41,7 +42,7 @@ export const offerSlice = createSlice({
                 menus: updatedMenus
             }
         },
-        deleteMenu: (state, action: PayloadAction<number>) => {
+        deleteMenu: (state, action: PayloadAction<string>) => {
             const updatedMenus = state.menus.filter(
                 (m) => m.id !== action.payload
             )
@@ -55,7 +56,7 @@ export const offerSlice = createSlice({
             }
         },
         addMenuItem: (state, action: PayloadAction<NewMenuItem>) => {
-            const newMenuItemId = state.menuItems.length + 1
+            const newMenuItemId = uuidv4()
             const newMenuItem = { ...action.payload, id: newMenuItemId }
             const updatedMenus = state.menus.map((m) =>
                 m.id === action.payload.menuId
@@ -83,7 +84,7 @@ export const offerSlice = createSlice({
                 menuItems: updatedMenuItems
             }
         },
-        deleteMenuItem: (state, action: PayloadAction<number>) => {
+        deleteMenuItem: (state, action: PayloadAction<string>) => {
             const updatedMenus = state.menus.map((m) => ({
                 ...m,
                 menuItemsIds: m.menuItemsIds.filter(
@@ -117,10 +118,10 @@ type UseOffer = {
     actions: {
         addMenu: (menu: NewMenu) => void
         updateMenu: (menu: Menu) => void
-        deleteMenu: (menuId: number) => void
+        deleteMenu: (menuId: string) => void
         addMenuItem: (menuItem: NewMenuItem) => void
         updateMenuItem: (menuItem: MenuItem) => void
-        deleteMenuItem: (menuItemId: number) => void
+        deleteMenuItem: (menuItemId: string) => void
     }
 }
 

@@ -6,10 +6,9 @@ import styled from '@emotion/styled'
 
 const FormWrapper = styled('form')`
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    align-items: baseline;
     > *:not(:last-child) {
-        margin-bottom: 1em;
+        margin-right: 1em;
     }
 `
 
@@ -35,7 +34,7 @@ export const Form: ComponentType<FormProps> = ({
             onSubmit={onSubmit}
             validate={validate}
             initialValues={initialValues}
-            render={({ handleSubmit, form }) => (
+            render={({ handleSubmit, form, valid }) => (
                 <FormWrapper
                     onSubmit={(data) => {
                         handleSubmit(data)
@@ -48,13 +47,17 @@ export const Form: ComponentType<FormProps> = ({
                     }}
                 >
                     {children}
-                    <Button variant="contained" type="submit">
+                    <Button variant="contained" type="submit" disabled={!valid}>
                         Submit
                     </Button>
                     <Snackbar
                         open={!!successText && isSuccess}
                         autoHideDuration={4000}
                         onClose={() => setIsSuccess(false)}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'left'
+                        }}
                     >
                         <Alert severity="success" sx={{ width: '100%' }}>
                             {successText}
