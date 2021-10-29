@@ -58,9 +58,7 @@ const MenuList: ComponentType = () => {
             {!hasMenus && (
                 <p>
                     No menus yet. Please add them in{' '}
-                    <Link to="/editor">
-                        <UiLink>editor</UiLink>
-                    </Link>
+                    <Link to="/editor">editor</Link>
                 </p>
             )}
             {hasMenus && (

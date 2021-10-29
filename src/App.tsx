@@ -10,7 +10,11 @@ const App: ComponentType = () => {
             <AppBar position="static">
                 <Toolbar sx={{ justifyContent: 'end' }}>
                     <Link to="/">
-                        <Typography variant="h6" component="span">
+                        <Typography
+                            variant="h6"
+                            component="span"
+                            sx={{ color: 'white' }}
+                        >
                             Preview
                         </Typography>
                     </Link>
@@ -18,7 +22,7 @@ const App: ComponentType = () => {
                         <Typography
                             variant="h6"
                             component="span"
-                            sx={{ marginLeft: '1em' }}
+                            sx={{ marginLeft: '1em', color: 'white' }}
                         >
                             Editor
                         </Typography>

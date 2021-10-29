@@ -1,23 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { useAppDispatch, useAppSelector } from 'store'
 import { Menu, MenuItem } from 'domain/offer/types'
 import { v4 as uuidv4 } from 'uuid'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 
 export type OfferState = {
     menus: Menu[]
     menuItems: MenuItem[]
 }
-export const initialState: OfferState = {
+export const initialOfferState: OfferState = {
     menus: [],
     menuItems: []
 }
 
-type NewMenu = Omit<Menu, 'id'>
+type NewMenu = Omit<Menu, 'id' | 'menuItemsIds'>
 type NewMenuItem = Omit<MenuItem, 'id'>
 
 export const offerSlice = createSlice({
     name: 'offer',
-    initialState,
+    initialState: initialOfferState,
     reducers: {
         addMenu: (state, action: PayloadAction<NewMenu>) => {
             const newMenuId = uuidv4()
@@ -142,4 +142,4 @@ export const useOffer = (): UseOffer => {
     }
 }
 
-export default offerSlice.reducer
+export const offerReducer = offerSlice.reducer
