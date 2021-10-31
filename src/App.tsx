@@ -2,14 +2,15 @@ import React, { ComponentType } from 'react'
 import { PreviewPage } from 'pages/PreviewPage'
 import { AppBar, Container, Toolbar, Typography } from '@mui/material'
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
-import { EditorPage } from './pages/EditorPage'
+import { EditorPage } from 'pages/EditorPage'
+import { pages } from 'routing'
 
 const App: ComponentType = () => {
     return (
         <Router>
-            <AppBar position="static">
+            <AppBar position="sticky">
                 <Toolbar sx={{ justifyContent: 'end' }}>
-                    <Link to="/">
+                    <Link to={pages.preview}>
                         <Typography
                             variant="h6"
                             component="span"
@@ -18,7 +19,7 @@ const App: ComponentType = () => {
                             Preview
                         </Typography>
                     </Link>
-                    <Link to="/editor">
+                    <Link to={pages.editor}>
                         <Typography
                             variant="h6"
                             component="span"
@@ -31,10 +32,10 @@ const App: ComponentType = () => {
             </AppBar>
             <Container maxWidth="lg" sx={{ padding: '1rem 0' }}>
                 <Switch>
-                    <Route exact path="/">
+                    <Route exact path={pages.preview}>
                         <PreviewPage />
                     </Route>
-                    <Route path="/editor">
+                    <Route path={pages.editor}>
                         <EditorPage />
                     </Route>
                 </Switch>

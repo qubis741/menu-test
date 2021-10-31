@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import { BorderBox } from 'components/ui/BorderBox'
 import { useOffer } from 'domain/offer/slice'
 import { MenuItem } from 'domain/offer/types'
+import { pages } from 'routing'
 
 const PreviewPageContainer = styled('div')`
     display: flex;
@@ -22,7 +23,7 @@ const MenuItemList: ComponentType<{ items: MenuItem[] }> = ({ items }) => {
             {!hasItems && (
                 <p>
                     No menu items yet. Please add them in{' '}
-                    <Link to="/editor">
+                    <Link to={pages.editor}>
                         <UiLink>editor</UiLink>
                     </Link>
                 </p>
@@ -58,7 +59,7 @@ const MenuList: ComponentType = () => {
             {!hasMenus && (
                 <p>
                     No menus yet. Please add them in{' '}
-                    <Link to="/editor">editor</Link>
+                    <Link to={pages.editor}>editor</Link>
                 </p>
             )}
             {hasMenus && (

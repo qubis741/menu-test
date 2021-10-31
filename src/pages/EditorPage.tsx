@@ -95,20 +95,12 @@ const MenuForm: ComponentType<{ menu?: Menu }> = ({ menu }) => {
             </Form>
 
             {menu && (
-                <Grid container spacing={2}>
-                    <Grid item lg={12}>
-                        <MenuItemForm menu={menu} />
-                    </Grid>
+                <>
+                    <MenuItemForm menu={menu} />
                     {relatedMenuItems.map((mi) => (
-                        <Grid key={mi.id} item lg={6}>
-                            <MenuItemForm
-                                key={mi.id}
-                                menu={menu}
-                                menuItem={mi}
-                            />
-                        </Grid>
+                        <MenuItemForm key={mi.id} menu={menu} menuItem={mi} />
                     ))}
-                </Grid>
+                </>
             )}
         </BorderBox>
     )

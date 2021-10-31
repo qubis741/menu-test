@@ -35,7 +35,7 @@ export const FormField: ComponentType<FormFieldProps> = ({
                             }}
                             helperText={
                                 isNumberInput
-                                    ? 'Use "," for decimals'
+                                    ? 'Use "," or "." for decimals'
                                     : undefined
                             }
                             error={!!error}
