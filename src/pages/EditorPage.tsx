@@ -44,7 +44,9 @@ const MenuItemForm: ComponentType<{ menu: Menu; menuItem?: MenuItem }> = ({
                         ? updateMenuItem({ ...d, menuId: menu.id })
                         : addMenuItem({ ...d, menuId: menu.id })
                 }
-                successText="Menu Item has been successfully added!"
+                successText={`Menu Item has been successfully ${
+                    menuItem ? 'updated' : 'added'
+                }!`}
                 initialValues={menuItem}
                 validate={(d) => {
                     if (!d.name) return { name: 'Required' }
@@ -82,7 +84,9 @@ const MenuForm: ComponentType<{ menu?: Menu }> = ({ menu }) => {
             <Form
                 onSubmit={(d) => (menu ? updateMenu(d) : addMenu(d))}
                 initialValues={menu}
-                successText="Menu has been successfully added!"
+                successText={`Menu has been successfully ${
+                    menu ? 'updated' : 'added'
+                }!`}
                 validate={(d) => {
                     if (!d.name) return { name: 'Required' }
                 }}
